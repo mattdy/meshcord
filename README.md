@@ -1,113 +1,88 @@
-# Mesh Watchdog — Webhook Edition 📡
+# Meshcord
 
-**Mesh Watchdog** is a lightweight, always-on notifier that listens for messages on your **Meshtastic** mesh network and relays them to a **Discord channel** using a simple **webhook**.
+[![Meshcord Banner](https://imgur.com/6WAbb44.png)](https://hub.docker.com/r/mmagtech/meshcord)
 
-It runs locally, alongside your MQTT broker, and notifies you in real time when any of your nodes receive a message. Perfect for home base stations, silent monitors, or anyone who wants to be alerted via Discord without carrying a radio.
+**Meshcord** is a lightweight MQTT-to-Discord alert system designed specifically for Meshtastic. It listens for incoming messages on specified Meshtastic channels (via MQTT) and sends formatted notifications to a Discord channel using a webhook. Ideal for users who want real-time mesh alerts delivered to their phone or desktop via Discord — no need to carry your node 24/7!
 
 ---
 
 ## 🚀 Features
 
-- 🛰️ Listens for messages from Meshtastic over MQTT
-- 🔗 Sends real-time alerts to Discord via webhook
-- ⏰ Includes timestamp and sender ID
-- ⚙️ Channel filtering support (monitor specific channels)
-- 📦 Simple setup with Docker or Python
+- 🛰️ Monitors multiple Meshtastic channels  
+- 📡 Sends alerts to a Discord channel via webhook  
+- 🔒 Runs locally on your network (no cloud dependencies)  
+- 🧠 Requires no Discord bot setup — just a webhook  
+- 🐳 Official Docker image available  
+- 🧩 Supports Unraid with custom icon
 
 ---
 
-## 🔧 Requirements
+## 🐳 Docker Deployment
 
-- A Meshtastic node with:
-  - **MQTT** enabled
-  - **Uplink** enabled
-- A local **MQTT broker** (e.g., Mosquitto)
-- A **Discord Webhook URL**
-- Docker or Python 3.9+
+👉 **Official Docker Image**:  
+**[mmagtech/meshcord on Docker Hub](https://hub.docker.com/r/mmagtech/meshcord)**
 
----
+### Quick Start (Docker CLI)
 
-## 🛠️ Setup
-
-### 1. Create a Discord Webhook
-
-1. Go to your Discord channel settings → **Integrations**
-2. Click **New Webhook**
-3. Name it (e.g., "Mesh Watchdog")
-4. Copy the webhook URL
-
-### 2. Configure `.env`
-
-Create a `.env` file in your project root:
-
-```env
-DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/your_id/your_token
-MQTT_BROKER=mosquitto
-MQTT_PORT=1883
-TIMEZONE=America/New_York
-WATCH_CHANNELS=1,2
-```
-
-- `WATCH_CHANNELS` is optional (comma-separated values)
-- `TIMEZONE` affects the timestamp format
-
----
-
-## ▶️ Run the Bot
-
-### With Docker
 ```bash
-docker compose up -d
+docker run -d \
+  --name meshcord \
+  -e DISCORD_WEBHOOK_URL="your_webhook_url" \
+  -e MQTT_BROKER="192.168.1.10" \
+  -e MQTT_PORT="1883" \
+  -e CHANNELS="1:Chat,2:Alerts" \
+  -e TIMEZONE="America/New_York" \
+  mmagtech/meshcord
 ```
 
-### With Python
+---
+
+### Unraid Users
+
+Use the following as the **container icon**:  
+📎 `https://imgur.com/6WAbb44.png`
+
+---
+
+## ⚙️ Environment Variables
+
+| Variable               | Description                                         | Required |
+|------------------------|-----------------------------------------------------|----------|
+| `DISCORD_WEBHOOK_URL`  | Webhook URL from your Discord server                | ✅       |
+| `MQTT_BROKER`          | IP address of your MQTT broker                      | ✅       |
+| `MQTT_PORT`            | MQTT broker port (default: 1883)                    | ✅       |
+| `CHANNELS`             | Comma-separated list of `channel_number:name`       | ✅       |
+| `TIMEZONE`             | Timezone (e.g., `America/New_York`)                 | ✅       |
+
+---
+
+## 📡 MQTT Configuration (Home Node)
+
+To monitor your mesh network from home:
+
+1. Connect your Meshtastic node to Wi-Fi.
+2. Go to the Meshtastic Web UI:
+   - Enable **MQTT**
+   - Set `MQTT Server Address` to your broker IP (e.g., `192.168.1.10`)
+   - Set `Root topic` to `meshtastic` (or keep default)
+3. On the desired channels:
+   - Enable **Uplink** (✅ Required)
+   - Leave **Downlink** disabled (✅ Not required)
+   - MQTT channel name **does not need to be** `mqtt`
+
+---
+
+## 💡 Use Case
+
+You’re away from home without your Meshtastic node.  
+Someone sends a message to your shared channel via LoRa.  
+Your home node receives it and Meshcord sends a formatted alert to Discord.  
+Boom — you’re in the loop in real time.
+
+---
+
+## 📦 Local Build (Optional)
+
 ```bash
-pip install -r requirements.txt
-python bot_webhook.py
+docker build -t meshcord .
 ```
-
----
-
-## 🧾 Sample Alert
-
-```
-📡 [1] !849ade78 @ 06:45 PM EDT: Hello from the mesh!
-```
-
----
-
-## 🌐 Local-Only Design
-
-This bot is designed to run inside your local network. If you plan to access it remotely, you must secure your MQTT broker (e.g., using a VPN or reverse proxy).
-
----
-
-## 🧠 Why Use This?
-
-If your Meshtastic base node is at home, you can still receive mesh messages via Discord anywhere in the world. No need for a second device in your pocket — just check Discord.
-
----
-
-## 🪪 License
-
-MIT — Free for personal or commercial use.
-
----
-
-Built with ❤️ for mesh explorers.
-
-## 📡 MQTT Configuration (for WiFi Node)
-
-The WiFi-connected Meshtastic node (your home base) should have the following settings:
-
-| Setting               | Value                     |
-|------------------------|----------------------------|
-| MQTT Enabled          | ✅ ON                      |
-| Uplink Enabled        | ✅ ON                      |
-| Downlink Enabled      | ❌ OFF (not needed)        |
-| MQTT Server Address   | `address of broker`             |
-| MQTT Port             | `1883` (default)           |
-| Root Topic            | `meshtastic` (default)     |
-| Uplink Channels       | Match `WATCH_CHANNELS` in `.env` |
-
-> ✅ Channel names do **not** need to be called `mqtt`. You can name them anything (e.g., `Meshages`, `FieldOps`).
