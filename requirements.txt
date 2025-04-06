@@ -1,0 +1,5 @@
+discord.py
+paho-mqtt
+python-dotenv
+pytz
+requests

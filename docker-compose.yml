@@ -1,0 +1,22 @@
+
+version: '3.8'
+
+services:
+  mesh_watchdog:
+    build: .
+    container_name: mesh_watchdog
+    env_file:
+      - .env
+    volumes:
+      - ./bot.py:/app/bot.py
+      - ./mqtt_interface.py:/app/mqtt_interface.py
+    depends_on:
+      - mosquitto
+    restart: unless-stopped
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+    restart: unless-stopped
