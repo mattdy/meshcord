@@ -18,7 +18,7 @@ if not DISCORD_WEBHOOK_URL:
     logging.error("DISCORD_WEBHOOK_URL not set in .env file.")
     exit(1)
 
-logging.info("Mesh Watchdog (Webhook Edition) starting...")
+logging.info("Meshcord starting...")
 logging.info(f"Webhook: {DISCORD_WEBHOOK_URL}")
 logging.info(f"MQTT Broker: {MQTT_BROKER}:{MQTT_PORT}")
 logging.info(f"Timezone: {TIMEZONE}")

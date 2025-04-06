@@ -1,6 +1,6 @@
 # Mesh Watchdog — Webhook Edition 📡
 
-**Meshcord** is a lightweight, always-on notifier that listens for messages on your **Meshtastic** mesh network and relays them to a **Discord channel** using a simple **webhook**.
+**Mesh Watchdog** is a lightweight, always-on notifier that listens for messages on your **Meshtastic** mesh network and relays them to a **Discord channel** using a simple **webhook**.
 
 It runs locally, alongside your MQTT broker, and notifies you in real time when any of your nodes receive a message. Perfect for home base stations, silent monitors, or anyone who wants to be alerted via Discord without carrying a radio.
 
@@ -21,7 +21,6 @@ It runs locally, alongside your MQTT broker, and notifies you in real time when 
 - A Meshtastic node with:
   - **MQTT** enabled
   - **Uplink** enabled
-  - A channel named `mqtt`
 - A local **MQTT broker** (e.g., Mosquitto)
 - A **Discord Webhook URL**
 - Docker or Python 3.9+
@@ -96,3 +95,19 @@ MIT — Free for personal or commercial use.
 ---
 
 Built with ❤️ for mesh explorers.
+
+## 📡 MQTT Configuration (for WiFi Node)
+
+The WiFi-connected Meshtastic node (your home base) should have the following settings:
+
+| Setting               | Value                     |
+|------------------------|----------------------------|
+| MQTT Enabled          | ✅ ON                      |
+| Uplink Enabled        | ✅ ON                      |
+| Downlink Enabled      | ❌ OFF (not needed)        |
+| MQTT Server Address   | `address of broker`             |
+| MQTT Port             | `1883` (default)           |
+| Root Topic            | `meshtastic` (default)     |
+| Uplink Channels       | Match `WATCH_CHANNELS` in `.env` |
+
+> ✅ Channel names do **not** need to be called `mqtt`. You can name them anything (e.g., `Meshages`, `FieldOps`).
