@@ -17,7 +17,11 @@ if not DISCORD_WEBHOOK_URL:
     logging.error("DISCORD_WEBHOOK_URL not set in .env file.")
     exit(1)
 
-logging.info("Starting Mesh Watchdog (Webhook Edition)...")
+logging.info("Mesh Watchdog (Webhook Edition) starting...")
+logging.info(f"Webhook: {DISCORD_WEBHOOK_URL}")
+logging.info(f"MQTT Broker: {MQTT_BROKER}:{MQTT_PORT}")
+logging.info(f"Timezone: {TIMEZONE}")
+logging.info(f"Watching channels: {WATCH_CHANNELS if WATCH_CHANNELS else 'All'}")
 
 setup_mqtt(
     webhook_url=DISCORD_WEBHOOK_URL,
