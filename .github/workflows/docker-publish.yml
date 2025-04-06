@@ -35,8 +35,8 @@ jobs:
           context: .
           push: true
           tags: |
-            mmagtech/meshenger:latest
-            mmagtech/meshenger:${{ github.sha }}
-            mmagtech/meshenger:${{ github.ref_name }}
+            mmagtech/meshcord:latest
+            mmagtech/meshcord:${{ github.sha }}
+            mmagtech/meshcord:${{ github.ref_name }}
           labels: ${{ steps.meta.outputs.labels }}
 
