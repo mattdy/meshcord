@@ -1,5 +1,6 @@
 import os
 import logging
+import time
 from dotenv import load_dotenv
 from mqtt_interface_webhook import setup_mqtt
 
@@ -30,3 +31,7 @@ setup_mqtt(
     timezone=TIMEZONE,
     watch_channels=WATCH_CHANNELS
 )
+
+# Keep the container alive
+while True:
+    time.sleep(60)
