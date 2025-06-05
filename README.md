@@ -53,6 +53,7 @@ Use the following as the **container icon**:
 | `MQTT_PORT`            | MQTT broker port (default: 1883)                    | ✅       |
 | `CHANNELS`             | Comma-separated list of `channel_number:name`       | ✅       |
 | `TIMEZONE`             | Timezone (e.g., `America/New_York`)                 | ✅       |
+| `LOGLEVEL`             | Logging level (e.g. `DEBUG`, default: `INFO`)       | ❌       |
 
 ---
 
