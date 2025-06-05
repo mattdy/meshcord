@@ -4,9 +4,10 @@ import time
 from dotenv import load_dotenv
 from mqtt_interface_webhook import setup_mqtt
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 load_dotenv()
+
+LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
+logging.basicConfig(level=LOGLEVEL, format="%(asctime)s - %(levelname)s - %(message)s")
 
 DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 MQTT_BROKER = os.getenv("MQTT_BROKER", "localhost")
@@ -19,6 +20,7 @@ if not DISCORD_WEBHOOK_URL:
     exit(1)
 
 logging.info("Meshcord starting...")
+logging.info(f"Logging: {LOGLEVEL}")
 logging.info(f"Webhook: {DISCORD_WEBHOOK_URL}")
 logging.info(f"MQTT Broker: {MQTT_BROKER}:{MQTT_PORT}")
 logging.info(f"Timezone: {TIMEZONE}")
